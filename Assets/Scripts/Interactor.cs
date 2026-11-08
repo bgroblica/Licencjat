@@ -29,21 +29,30 @@ public class Interactor : MonoBehaviour
     private bool DoInteractionTest(out IInteractable interactable)
     {
         interactable = null;
-
+    
         Ray ray = new Ray(transform.position + rayCastOffset, transform.forward);
-
-        if(Physics.Raycast(ray, out RaycastHit hitinfo, castDistance))
+    
+        Debug.DrawRay(ray.origin, ray.direction * castDistance, Color.red);
+    
+        if (Physics.Raycast(ray, out RaycastHit hitinfo, castDistance))
         {
+            Debug.Log("Raycast hit: " + hitinfo.collider.name);
+    
             interactable = hitinfo.collider.GetComponent<IInteractable>();
-
-            if(interactable != null)
+    
+            if (interactable != null)
             {
+                Debug.Log("Found an interactable object: " + hitinfo.collider.name);
                 return true;
             }
-
-            return false;
+    
+            Debug.Log("Object is NOT interactable!");
         }
-
+        else
+        {
+            Debug.Log("Raycast didn't hit anything!");
+        }
+    
         return false;
     }
 }
