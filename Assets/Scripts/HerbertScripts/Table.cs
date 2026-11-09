@@ -12,17 +12,22 @@ public class Table : MonoBehaviour, IInteractable
     [SerializeField] private GameObject food3Vis;
 
     [Header("Timers")]
-    [SerializeField] private float minEatTime = 15f;
-    [SerializeField] private float maxEatTime = 30f;
+    [SerializeField] private float minEatTime = 10f;
+    [SerializeField] private float maxEatTime = 20f;
 
-    [SerializeField] private float minWaitTime = 15f;
-    [SerializeField] private float maxWaitTime = 30f;
+    [SerializeField] private float waitTime = 20f;
 
-    private float timeRemaining;
+    [SerializeField] private TableIndicator tableIndicator;
+
     private float timeToEatRemaining;
 
+    private float timeWaitingRemaining;
+
+    public bool isEating = false;
+    public bool IsEating => isEating;
+
     private bool isWaiting = false;
-    private bool isEating = false;
+    public bool IsWaiting => isWaiting;
 
     private DishHolder dishHolder;
 
@@ -40,8 +45,6 @@ public class Table : MonoBehaviour, IInteractable
         UpdateVisual();
 
         dishHolder = FindFirstObjectByType<DishHolder>();
-
-        ChooseDish();
     }
 
     private void Update()
@@ -57,26 +60,26 @@ public class Table : MonoBehaviour, IInteractable
 
                 foodOnTable = foodType.nothing;
                 UpdateVisual();
-
-                ChooseDish();
             }
         }
-        else if (isWaiting)
-        {
-            timeRemaining -= Time.deltaTime;
 
-            if (timeRemaining <= 0f)
+        if (isWaiting)
+        {
+            timeWaitingRemaining -= Time.deltaTime;
+
+            if (timeWaitingRemaining <= 0f)
             {
-                timeRemaining = 0f;
+                timeWaitingRemaining = 0f;
+                isWaiting = false;
+
                 NoDish();
-                ChooseDish();
             }
         }
     }
 
     public bool CanInteract()
     {
-        return isWaiting && !isEating;
+        return !isEating;
     }
 
     public bool Interact(Interactor interactor)
@@ -100,24 +103,19 @@ public class Table : MonoBehaviour, IInteractable
 
         foodType deliveredFood = dishHolder.dishTypeInHand;
 
+        tableIndicator.Hide();
+
         dishHolder.PutDown();
 
         foodOnTable = deliveredFood;
 
         UpdateVisual();
 
-        isWaiting = false;
-
         EatTimer();
 
         Debug.Log("Correct dish delivered!");
 
         return true;
-    }
-
-    private void WrongDish()
-    {
-        Debug.Log("Wrong Dish!");
     }
 
     private void EatTimer()
@@ -128,32 +126,38 @@ public class Table : MonoBehaviour, IInteractable
         Debug.Log($"Eating for {timeToEatRemaining:F1} seconds.");
     }
 
-    private void ChooseDish()
+    public void ChooseDish()
     {
         int randomIndex = Random.Range(0, possibleFoods.Length);
-
+    
         requiredFoodType = possibleFoods[randomIndex];
+    
+        tableIndicator.Show(requiredFoodType);
 
-        OrderTimer();
-
+        WaitTimer();
+    
         Debug.Log($"I want {requiredFoodType}");
     }
 
-    private void OrderTimer()
+    private void WaitTimer()
     {
-        timeRemaining = Random.Range(minWaitTime, maxWaitTime);
+        timeWaitingRemaining = waitTime;
         isWaiting = true;
 
-        Debug.Log($"You have {timeRemaining:F1} seconds to deliver the food.");
+        Debug.Log($"Waiting for {waitTime:F1} seconds.");
     }
 
     private void NoDish()
     {
-        isWaiting = false;
-
         requiredFoodType = foodType.nothing;
+        UpdateVisual();
 
         Debug.Log("Didn't bring dish in time!");
+    }
+
+        private void WrongDish()
+    {
+        Debug.Log("Wrong Dish!");
     }
 
     private void UpdateVisual()
