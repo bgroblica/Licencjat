@@ -6,9 +6,9 @@ public class TrolleyDishSpawner : MonoBehaviour, IInteractable
     [SerializeField] private foodType trolleyType;
 
     [Header("Dish visuals")]
-    [SerializeField] private GameObject food1Vis;
-    [SerializeField] private GameObject food2Vis;
-    [SerializeField] private GameObject food3Vis;
+    [SerializeField] private GameObject foodSoupVis;
+    [SerializeField] private GameObject foodMeatVis;
+    [SerializeField] private GameObject foodShrimpVis;
 
     private DishHolder dishHolder;
 
@@ -45,8 +45,8 @@ public class TrolleyDishSpawner : MonoBehaviour, IInteractable
 
     private void UpdateVisual()
     {
-        food1Vis.SetActive(trolleyType == foodType.food1);
-        food2Vis.SetActive(trolleyType == foodType.food2);
-        food3Vis.SetActive(trolleyType == foodType.food3);
+        foodSoupVis.SetActive(trolleyType == foodType.foodSoup);
+        foodMeatVis.SetActive(trolleyType == foodType.foodMeat);
+        foodShrimpVis.SetActive(trolleyType == foodType.foodShrimp);
     }
 }

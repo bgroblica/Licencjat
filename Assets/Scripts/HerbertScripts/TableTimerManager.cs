@@ -18,6 +18,8 @@ public class TableTimerManager : MonoBehaviour
 
     private int roundCounter = 0;
 
+    private bool isDecreasing = true;
+
     private void Start()
     {
         StartCoroutine(TimerRoutine());
@@ -30,25 +32,25 @@ public class TableTimerManager : MonoBehaviour
         {
             yield return new WaitForSeconds(timerDuration);
 
-            AffectRandomObject();
+            AffectRandomTable();
 
-            roundCounter++;
-
-            if (roundCounter >= roundsBeforeDecrease)
+            if (isDecreasing == true)
             {
-                roundCounter = 0;
+                roundCounter++;
 
-                timerDuration = Mathf.Max(
-                    timerDuration - timerDecreaseAmount,
-                    minimumTimerDuration
-                );
-
-                Debug.Log($"Timer decreased! New duration: {timerDuration} seconds.");
+                if (roundCounter >= roundsBeforeDecrease)
+                {
+                    roundCounter = 0;
+    
+                    timerDuration = Mathf.Max(timerDuration - timerDecreaseAmount,minimumTimerDuration);
+    
+                    Debug.Log($"Timer decreased! New duration: {timerDuration} seconds.");
+                }
             }
         }
     }
 
-    void AffectRandomObject()
+    void AffectRandomTable()
     {
         List<Table> availableTables = new List<Table>();
 
@@ -70,8 +72,6 @@ public class TableTimerManager : MonoBehaviour
 
         Table selectedTable = availableTables[randomIndex];
 
-        Debug.Log("Affected: " + selectedTable.name);
-
         selectedTable.ChooseDish();
     }
     void ChooseInitialTables()
@@ -87,8 +87,6 @@ public class TableTimerManager : MonoBehaviour
             int randomIndex = Random.Range(0, availableTables.Count);
     
             Table selectedTable = availableTables[randomIndex];
-    
-            Debug.Log("Initial table selected: " + selectedTable.name);
     
             selectedTable.ChooseDish();
     

@@ -3,20 +3,24 @@ using UnityEngine;
 
 public class Table : MonoBehaviour, IInteractable
 {
-    [SerializeField] private foodType requiredFoodType;
-    [SerializeField] private foodType foodOnTable;
+    private foodType requiredFoodType;
+    private foodType foodOnTable;
 
     [Header("Dish visuals")]
-    [SerializeField] private GameObject food1Vis;
-    [SerializeField] private GameObject food2Vis;
-    [SerializeField] private GameObject food3Vis;
+    [SerializeField] private GameObject foodSoupVis;
+    [SerializeField] private GameObject foodMeatVis;
+    [SerializeField] private GameObject foodShrimpVis;
 
     [Header("Timers")]
     [SerializeField] private float minEatTime = 10f;
     [SerializeField] private float maxEatTime = 20f;
-
     [SerializeField] private float waitTime = 20f;
 
+    [Header("Stress damage")]
+    [SerializeField] private float noDishStress = 0.025f;
+    [SerializeField] private float wrongDishStress = 0.001f;
+
+    [Header("References")]
     [SerializeField] private TableIndicator tableIndicator;
 
     private float timeToEatRemaining;
@@ -31,11 +35,13 @@ public class Table : MonoBehaviour, IInteractable
 
     private DishHolder dishHolder;
 
+    private StressBar stressBar;
+
     private readonly foodType[] possibleFoods =
     {
-        foodType.food1,
-        foodType.food2,
-        foodType.food3
+        foodType.foodSoup,
+        foodType.foodMeat,
+        foodType.foodShrimp
     };
 
     private void Awake()
@@ -45,6 +51,8 @@ public class Table : MonoBehaviour, IInteractable
         UpdateVisual();
 
         dishHolder = FindFirstObjectByType<DishHolder>();
+        stressBar = FindAnyObjectByType<StressBar>();
+        tableIndicator = GetComponentInChildren<TableIndicator>();
     }
 
     private void Update()
@@ -122,8 +130,6 @@ public class Table : MonoBehaviour, IInteractable
     {
         timeToEatRemaining = Random.Range(minEatTime, maxEatTime);
         isEating = true;
-
-        Debug.Log($"Eating for {timeToEatRemaining:F1} seconds.");
     }
 
     public void ChooseDish()
@@ -135,16 +141,12 @@ public class Table : MonoBehaviour, IInteractable
         tableIndicator.Show(requiredFoodType);
 
         WaitTimer();
-    
-        Debug.Log($"I want {requiredFoodType}");
     }
 
     private void WaitTimer()
     {
         timeWaitingRemaining = waitTime;
         isWaiting = true;
-
-        Debug.Log($"Waiting for {waitTime:F1} seconds.");
     }
 
     private void NoDish()
@@ -152,18 +154,19 @@ public class Table : MonoBehaviour, IInteractable
         requiredFoodType = foodType.nothing;
         UpdateVisual();
 
-        Debug.Log("Didn't bring dish in time!");
+        stressBar.AddStress(noDishStress);
     }
 
         private void WrongDish()
     {
-        Debug.Log("Wrong Dish!");
+        stressBar.AddStress(wrongDishStress);
+        Debug.Log("Wrong Dish");
     }
 
     private void UpdateVisual()
     {
-        food1Vis.SetActive(foodOnTable == foodType.food1);
-        food2Vis.SetActive(foodOnTable == foodType.food2);
-        food3Vis.SetActive(foodOnTable == foodType.food3);
+        foodSoupVis.SetActive(foodOnTable == foodType.foodSoup);
+        foodMeatVis.SetActive(foodOnTable == foodType.foodMeat);
+        foodShrimpVis.SetActive(foodOnTable == foodType.foodShrimp);
     }
 }
