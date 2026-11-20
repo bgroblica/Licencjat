@@ -3,9 +3,9 @@ using UnityEngine;
 public class DishHolder : MonoBehaviour
 {
     [Header("Dish visuals")]
-    [SerializeField] private GameObject food1Vis;
-    [SerializeField] private GameObject food2Vis;
-    [SerializeField] private GameObject food3Vis;
+    [SerializeField] private GameObject foodSoupVis;
+    [SerializeField] private GameObject foodMeatVis;
+    [SerializeField] private GameObject foodShrimpVis;
 
     public foodType dishTypeInHand{ get; private set;}
 
@@ -17,9 +17,9 @@ public class DishHolder : MonoBehaviour
 
     private void UpdateVisual()
     {
-        food1Vis.SetActive(dishTypeInHand == foodType.food1);
-        food2Vis.SetActive(dishTypeInHand == foodType.food2);
-        food3Vis.SetActive(dishTypeInHand == foodType.food3);
+        foodSoupVis.SetActive(dishTypeInHand == foodType.foodSoup);
+        foodMeatVis.SetActive(dishTypeInHand == foodType.foodMeat);
+        foodShrimpVis.SetActive(dishTypeInHand == foodType.foodShrimp);
     }
     public void PickUp(foodType type)
     {
