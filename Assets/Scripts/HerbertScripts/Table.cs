@@ -109,6 +109,8 @@ public class Table : MonoBehaviour, IInteractable
             return false;
         }
 
+        isWaiting = false;
+
         foodType deliveredFood = dishHolder.dishTypeInHand;
 
         tableIndicator.Hide();
@@ -156,6 +158,7 @@ public class Table : MonoBehaviour, IInteractable
         UpdateVisual();
 
         stressBar.AddStress(noDishStress);
+        Debug.Log($"No Dish in: {this}");
     }
 
     private void WrongDish()

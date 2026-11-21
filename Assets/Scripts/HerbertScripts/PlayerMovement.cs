@@ -6,8 +6,7 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
-    [SerializeField] private float walkSpeed = 4.5f;
-    [SerializeField] private float runSpeed = 7.5f;
+    [SerializeField] private float walkSpeed = 5f;
     [SerializeField] private float gravity = 30f;
 
     [Header("Looking")]
@@ -27,9 +26,7 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController characterController;
 
     private InputAction moveInput;
-    private InputAction runInput;
 
-    private float currentMoveSpeed;
     private Vector3 moveDirection = Vector3.zero;
     private Vector3 knockbackVelocity;
 
@@ -51,19 +48,14 @@ public class PlayerMovement : MonoBehaviour
         characterController = GetComponent<CharacterController>();
 
         moveInput = InputSystem.actions.FindAction("Move");
-        runInput = InputSystem.actions.FindAction("Sprint");
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
-        currentMoveSpeed = walkSpeed;
     }
 
     private void Update()
     {
         Vector2 moveVector = moveInput.ReadValue<Vector2>();
-
-        currentMoveSpeed = runInput.IsPressed() ? runSpeed : walkSpeed;
 
         HandleMovement(moveVector);
 
@@ -81,7 +73,7 @@ public class PlayerMovement : MonoBehaviour
         float oldY = moveDirection.y;
 
         moveDirection =
-            (forward * moveVector.y + right * moveVector.x) * currentMoveSpeed;
+            (forward * moveVector.y + right * moveVector.x) * walkSpeed;
 
         moveDirection.y = oldY;
 

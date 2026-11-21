@@ -36,21 +36,21 @@ public class Interactor : MonoBehaviour
     
         if (Physics.Raycast(ray, out RaycastHit hitinfo, castDistance))
         {
-            Debug.Log("Raycast hit: " + hitinfo.collider.name);
+            //Debug.Log("Raycast hit: " + hitinfo.collider.name);
     
             interactable = hitinfo.collider.GetComponent<IInteractable>();
     
             if (interactable != null)
             {
-                Debug.Log("Found an interactable object: " + hitinfo.collider.name);
+                //Debug.Log("Found an interactable object: " + hitinfo.collider.name);
                 return true;
             }
     
-            Debug.Log("Object is NOT interactable!");
+            //Debug.Log("Object is NOT interactable!");
         }
         else
         {
-            Debug.Log("Raycast didn't hit anything!");
+            //Debug.Log("Raycast didn't hit anything!");
         }
     
         return false;

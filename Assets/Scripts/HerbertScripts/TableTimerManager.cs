@@ -43,8 +43,6 @@ public class TableTimerManager : MonoBehaviour
                     roundCounter = 0;
     
                     timerDuration = Mathf.Max(timerDuration - timerDecreaseAmount,minimumTimerDuration);
-    
-                    Debug.Log($"Timer decreased! New duration: {timerDuration} seconds.");
                 }
 
                 if (timerDuration <= minimumTimerDuration)

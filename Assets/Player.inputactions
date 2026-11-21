@@ -3,7 +3,7 @@
     "name": "Player",
     "maps": [
         {
-            "name": "Gameplay",
+            "name": "Gameplay-Herbert",
             "id": "62b5ed6a-25b9-4ea8-8b3e-0fca2f438682",
             "actions": [
                 {
@@ -24,16 +24,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true,
-                    "priority": 0
-                },
-                {
-                    "name": "Sprint",
-                    "type": "Button",
-                    "id": "975e00d2-3659-4844-9655-97f7e3a13171",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false,
                     "priority": 0
                 },
                 {
@@ -111,17 +101,6 @@
                     "processors": "",
                     "groups": ";KeyBoard",
                     "action": "Look",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "34c57f94-dbf4-41f8-9b14-cc9c525d30ce",
-                    "path": "<Keyboard>/leftShift",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";KeyBoard",
-                    "action": "Sprint",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

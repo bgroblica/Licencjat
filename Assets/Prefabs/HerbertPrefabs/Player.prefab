@@ -171,8 +171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da3899e5d10f86e44b5121edfbf9117d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
-  walkSpeed: 4.5
-  runSpeed: 7.5
+  walkSpeed: 5
   gravity: 30
   lookSensitivity: 0.5
   lookAngleLimit: 90
@@ -210,7 +209,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCollision
   collisionStress: 0.015
   knockbackForce: 30
-  collisionCooldown: 0.5
+  collisionCooldown: 0.65
   stressBar: {fileID: 0}
   playerMovement: {fileID: 2235690401041918719}
 --- !u!114 &438719566641158961
@@ -225,7 +224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f67c40ae5b1fbdb4a8d2ff9ad48adb3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactor
-  castDistance: 5
+  castDistance: 2
   rayCastOffset: {x: 0, y: 1, z: 0}
 --- !u!136 &6702936703495394615
 CapsuleCollider:
