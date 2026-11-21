@@ -19,11 +19,23 @@ public class TableIndicator : MonoBehaviour
 
     private Vector3 startPosition;
     private Tween floatTween;
+    private PlayerMovement playerInstance;
 
     private void Awake()
     {
         startPosition = textTransform.localPosition;
         textTransform.gameObject.SetActive(false);
+
+        playerInstance = FindFirstObjectByType<PlayerMovement>();
+
+        if (playerInstance != null)
+        {
+            player = playerInstance.transform;
+        }
+        else
+        {
+            Debug.LogWarning("PlayerMovement not found in scene!", this);
+        }
     }
 
     private void LateUpdate()

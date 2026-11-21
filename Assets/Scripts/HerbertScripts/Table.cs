@@ -17,8 +17,8 @@ public class Table : MonoBehaviour, IInteractable
     [SerializeField] private float waitTime = 20f;
 
     [Header("Stress damage")]
-    [SerializeField] private float noDishStress = 0.025f;
-    [SerializeField] private float wrongDishStress = 0.001f;
+    [SerializeField] private float noDishStress = 0.05f;
+    [SerializeField] private float wrongDishStress = 0.01f;
 
     [Header("References")]
     [SerializeField] private TableIndicator tableIndicator;
@@ -87,7 +87,7 @@ public class Table : MonoBehaviour, IInteractable
 
     public bool CanInteract()
     {
-        return !isEating;
+        return !isEating && isWaiting;
     }
 
     public bool Interact(Interactor interactor)
@@ -152,12 +152,13 @@ public class Table : MonoBehaviour, IInteractable
     private void NoDish()
     {
         requiredFoodType = foodType.nothing;
+        tableIndicator.Hide();
         UpdateVisual();
 
         stressBar.AddStress(noDishStress);
     }
 
-        private void WrongDish()
+    private void WrongDish()
     {
         stressBar.AddStress(wrongDishStress);
         Debug.Log("Wrong Dish");

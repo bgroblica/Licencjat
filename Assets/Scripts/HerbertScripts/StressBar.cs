@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class StressBar : MonoBehaviour
 {
-    [SerializeField] private float stressMult = 0.005f;
+    [SerializeField] private float stressMult = 0.00333f;
     [SerializeField] private float currentStress;
     [SerializeField] private float maxStress = 1f;
 
@@ -31,7 +31,8 @@ public class StressBar : MonoBehaviour
     }
     public void AddStress(float stressToAdd)
     {
-        currentStress -= stressToAdd * stressMult;
+        currentStress -= stressToAdd;
+        Debug.Log($"Added stress: {stressToAdd}");
     }
 
     public void GetCurrentFill()

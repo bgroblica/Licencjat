@@ -46,6 +46,11 @@ public class TableTimerManager : MonoBehaviour
     
                     Debug.Log($"Timer decreased! New duration: {timerDuration} seconds.");
                 }
+
+                if (timerDuration <= minimumTimerDuration)
+                {
+                    isDecreasing = false;
+                }
             }
         }
     }

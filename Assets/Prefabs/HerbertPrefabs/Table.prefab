@@ -316,14 +316,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52405718affdb46d692b1422757c7683, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Table
-  requiredFoodType: 3
-  foodOnTable: 3
   foodSoupVis: {fileID: 4392880299614357103}
   foodMeatVis: {fileID: 5303929310178497021}
   foodShrimpVis: {fileID: 7544268971429551688}
   minEatTime: 5
   maxEatTime: 15
   waitTime: 20
+  noDishStress: 0.05
+  wrongDishStress: 0.01
   tableIndicator: {fileID: 7957824968088817481}
   isEating: 0
 --- !u!1 &7806668675394754372
