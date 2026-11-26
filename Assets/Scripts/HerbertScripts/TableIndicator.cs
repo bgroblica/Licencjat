@@ -1,14 +1,16 @@
-
 using UnityEngine;
-using TMPro;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class TableIndicator : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private Transform textTransform;
-    [SerializeField] private TextMeshProUGUI text;
-    [SerializeField] private Transform player;
+    [SerializeField] private Image foodIcon;
+
+    [Header("Food Icons")]
+    [SerializeField] private Sprite meatIcon;
+    [SerializeField] private Sprite soupIcon;
+    [SerializeField] private Sprite shrimpIcon;
 
     [Header("Floating")]
     [SerializeField] private float floatHeight = 0.25f;
@@ -17,56 +19,71 @@ public class TableIndicator : MonoBehaviour
     [Header("Rotation")]
     [SerializeField] private float rotationSpeed = 8f;
 
+    private Transform iconTransform;
     private Vector3 startPosition;
     private Tween floatTween;
-    private PlayerMovement playerInstance;
+    private Transform player;
 
     private void Awake()
     {
-        startPosition = textTransform.localPosition;
-        textTransform.gameObject.SetActive(false);
+        iconTransform = foodIcon.transform;
+        startPosition = iconTransform.localPosition;
 
-        playerInstance = FindFirstObjectByType<PlayerMovement>();
+        foodIcon.gameObject.SetActive(false);
 
-        if (playerInstance != null)
+        if (player == null)
         {
-            player = playerInstance.transform;
-        }
-        else
-        {
-            Debug.LogWarning("PlayerMovement not found in scene!", this);
+            PlayerMovement playerInstance =
+                FindFirstObjectByType<PlayerMovement>();
+
+            if (playerInstance != null)
+                player = playerInstance.transform;
+            else
+                Debug.LogWarning("PlayerMovement not found!", this);
         }
     }
 
     private void LateUpdate()
     {
-        if (!textTransform.gameObject.activeSelf || player == null)
+        if (!foodIcon.gameObject.activeInHierarchy || player == null)
             return;
 
-        Vector3 direction = player.position - textTransform.position;
+        Vector3 direction = player.position - iconTransform.position;
 
         if (direction.sqrMagnitude > 0.001f)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0f, 180f, 0f);
+            Quaternion targetRotation =
+                Quaternion.LookRotation(direction) *
+                Quaternion.Euler(0f, 180f, 0f);
 
-            textTransform.rotation = Quaternion.Slerp(
-                textTransform.rotation,
-                targetRotation,
-                rotationSpeed * Time.deltaTime
-            );
+            iconTransform.rotation = Quaternion.Slerp(iconTransform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
         }
     }
 
     public void Show(foodType food)
     {
-        text.text = food.ToString();
+        Sprite sprite = food switch
+        {
+            foodType.foodSoup => soupIcon,
+            foodType.foodMeat => meatIcon,
+            foodType.foodShrimp => shrimpIcon,
+            _ => null
+        };
 
-        if (textTransform.gameObject.activeSelf)
+        if (sprite == null)
+        {
+            Debug.LogWarning($"Missing icon for {food}", this);
+            Hide();
             return;
+        }
 
-        textTransform.gameObject.SetActive(true);
+        foodIcon.sprite = sprite;
+        foodIcon.gameObject.SetActive(true);
 
-        floatTween = textTransform.DOLocalMoveY(startPosition.y + floatHeight, floatDuration).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo);
+        floatTween?.Kill();
+        iconTransform.localPosition = startPosition;
+
+        floatTween = iconTransform.DOLocalMoveY(startPosition.y + floatHeight, floatDuration).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo);
     }
 
     public void Hide()
@@ -74,8 +91,8 @@ public class TableIndicator : MonoBehaviour
         floatTween?.Kill();
         floatTween = null;
 
-        textTransform.localPosition = startPosition;
-        textTransform.gameObject.SetActive(false);
+        iconTransform.localPosition = startPosition;
+        foodIcon.gameObject.SetActive(false);
     }
 
     private void OnDestroy()
